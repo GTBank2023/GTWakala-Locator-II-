@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>GTWakala Locator</title>
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+  <!-- Leaflet Routing Machine -->
+  <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css"
+  />
+  <style>
+    /* Add your CSS styles here */
+    body {
+      font-family: Montserrat, Frutiger;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      text-align: center;
+      color: #D73502; /* Use the custom color for the title */
+    }
+
+    #map {
+      height: 500px;
+    }
+
+    #branchList {
+      margin-top: 20px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      background-color: #D73502; /* Use the custom color for the branch list background */
+      color: white;
+    }
+
+    /* Custom marker style */
+    .custom-marker {
+      width: 20px;
+      height: 20px;
+      background-color: #D73502; /* Use the custom color for the marker */
+      border-radius: 50%;
+    }
+
+    /* Custom link style */
+    a {
+      color: blue; /* Change link color to grey */
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>GTWakala Locator</h1>
+  <div id="map"></div>
+  <div id="branchList"></div>
+
+  <script>
+    // Branch data
+    const branches = [
+   {
+        name: "Ally Omary",
+        latitude: -6.789639,
+        longitude: 39.265889,
+       address: "Ufipa Street, Kinondoni, Dar es Salaam",
+      },
+
+      {
+        name: "Arthur Charles Basasingohe",
+        latitude: -6.768472,
+        longitude: 39.269472,
+        address: "Macho Bus Stop, Kimweri Ave, Msasani, Dar es Salaam",
+      },
+
+ {
+        name: "Betela Hassani Miraji",
+        latitude: -6.999889,
+        longitude: 39.523556,
+        address: "Lake Cement, Kimbiji, Dar es Salaam  ",
+      },
+      {
+        name: "Christian Michael Makawa",
+        latitude: -6.788222,
+        longitude: 39.229389,
+        address: "White Inn, Morogoro Connect Rd, Sinza, Dar es Salaam",
+      },
+
+ {
+        name: "Denis Muhehe",
+        latitude: -6.772917,
+        longitude: 39.255667,
+        address: "Opp. Kairuki Hospital, 66 – 47 Historia St, Mikocheni, Dar es Salaam",
+      },
+      {
+        name: "Fedha Investment",
+        latitude: -6.815389,
+        longitude: 39.290083,
+        address: "Opp. Uhuru Peak, 4 Pamba Rd, Dar es Salaam",
+      },
+
+ {
+        name: "Goodluck Salvatory Marwa",
+        latitude: -6.768444,
+        longitude: 39.217694,
+        address: "Survey, University Rd, University, Dar es Salaa",
+      },
+      {
+        name: "Jaalab Enterprises Ltd",
+        latitude: -6.770694,
+        longitude: 39.220861,
+        address: "Sky City Mall, University Rd, University, Dar es Salaam",
+      },
+
+ {
+        name: "Laut Company",
+        latitude: -6.760500,
+        longitude: 39.252000,
+        address: "Mwalimu Nyerere Junction, Mwai Kibaki Rd, Mikocheni, Dar es Salaam",
+      },
+      {
+        name: "Lidya Vicent Ngowi",
+        latitude: -6.817500,
+        longitude: 39.270667,
+        address: "Relini, Nelson Mandela Rd, Tabata, Dar es Salaam",
+      },
+
+ {
+        name: "Mariam Omari Sabuni ",
+        latitude: -6.790250,
+        longitude: -74.0060,
+        address: "Kinondoni Makaburini, Kinondoni Rd, Kinondoni, Dar es Salaam",
+      },
+      {
+        name: "Martin Stephen Mwinuka",
+        latitude: -10.273583,
+        longitude: 40.181278,
+        address: "Opposite Nangwanda Stadium, Mpirani Rd, Ligula, Mtwara",
+      },
+
+ {
+        name: "Mazil Pharmacy",
+        latitude: -6.779083,
+        longitude: 39.218694,
+        address: "Igesa Rd, Sinza, Dar es Salaam,",
+      },
+      {
+        name: "Mohamed Bmax",
+        latitude: -6.776972,
+        longitude: 39.228556,
+        address: "Opp. Big Bon Petrol Station, Mori Road, Sinza, Dar es Salaam,",
+      },
+
+ {
+        name: "Napenda Finance Service",
+        latitude: -6.768972,
+        longitude: 39.225750,
+        address: "Rufungila, Sam Nujoma Rd, Mwenge, Dar es Salaam,",
+      },
+      {
+        name: "Neema Shop",
+        latitude: -6.764611,
+        longitude: 39.269028,
+        address: "TIRDO, Kimweri Avenue, Msasani, Dar es Salaam,",
+      },
+
+ {
+        name: "Nestory Fredrick Anthony",
+        latitude: -6.776806,
+        longitude: 39.270417,
+        address: "Namanga Bus Stop, Kimweri Ave, Oysterbay, Dar es Salaam",
+      },
+      {
+        name: "Nimpher Mlay",
+        latitude:  -6.773528,
+        longitude: 39.233667,
+        address: "Africa Sana, Radihuru St, Mwenge, Dar es Salaam",
+      },
+
+ {
+        name: "Ntagira Machaba Ntagira",
+        latitude: -6.703083,
+        longitude: 39.207972,
+        address: "Africana Bus Stop, Mbezi, Bagamoyo Rd, Dar es Salaam, ",
+      },
+      {
+        name: "Omary Hussein Igango ",
+        latitude: -10.262694,
+        longitude: 40.034361,
+        address: "Dangote Industrial Area, Mikindani, Mtwara,",
+      },
+    ];
+
+    // Initialize the map
+    var map = L.map("map").setView([-6.789639, 39.265889], 12);
+
+    // Add a tile layer (OpenStreetMap) to the map
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
+
+    // Define a custom color for the markers (e.g., dark orange)
+    var iconColor = "#D73502";
+
+    // Function to calculate the distance between two points using the Haversine formula
+    function calculateDistance(lat1, lon1, lat2, lon2) {
+      var R = 6371; // Radius of the Earth in kilometers
+      var dLat = (lat2 - lat1) * (Math.PI / 180);
+      var dLon = (lon2 - lon1) * (Math.PI / 180);
+      var a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos((lat1 * Math.PI) / 180) *
+          Math.cos((lat2 * Math.PI) / 180) *
+          Math.sin(dLon / 2) *
+          Math.sin(dLon / 2);
+      var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      var distance = R * c;
+      return distance;
+    }
+
+    // Function to show directions to a specific branch using Leaflet Routing Machine
+    function showDirectionsToBranch(latitude, longitude) {
+      if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(
+          function (position) {
+            var userLat = position.coords.latitude;
+            var userLon = position.coords.longitude;
+
+            // Calculate the distance to each branch and sort branches by distance
+            branches.sort(function (a, b) {
+              var distanceA = calculateDistance(userLat, userLon, a.latitude, a.longitude);
+              var distanceB = calculateDistance(userLat, userLon, b.latitude, b.longitude);
+              return distanceA - distanceB;
+            });
+
+            // Display the sorted list of nearby branches
+            showNearbyBranches(userLat, userLon);
+
+            // Create a routing control and add it to the map
+            var control = L.Routing.control({
+              waypoints: [
+                L.latLng(userLat, userLon),
+                L.latLng(latitude, longitude),
+              ],
+              routeWhileDragging: true,
+            }).addTo(map);
+
+            // Event listener to wait for route to be ready before reading directions
+            control.on("routesfound", function (e) {
+              var instructions = e.routes[0].instructions;
+
+              // Call the function to read directions aloud with a pause between each step
+              readDirectionsAloud(instructions);
+            });
+          },
+          function (error) {
+            console.error("Error retrieving location:", error.message);
+          }
+        );
+      } else {
+        console.log("Geolocation API is not supported");
+      }
+    }
+
+    // Function to display the sorted list of nearby branches
+    function showNearbyBranches(userLat, userLon) {
+      var branchListDiv = document.getElementById("branchList");
+      branchListDiv.innerHTML = "<h2>Nearby GTWakala:</h2>";
+
+      branches.forEach(function (branch) {
+        var distance = calculateDistance(userLat, userLon, branch.latitude, branch.longitude);
+        branchListDiv.innerHTML += `<p>${branch.name} - ${branch.address} (${distance.toFixed(
+          2
+        )} km) <a href="#" onclick="showDirectionsToBranch(${branch.latitude}, ${branch.longitude})">Get Directions</a></p>`;
+      });
+    }
+
+    // Function to read directions aloud with a pause between each step
+    function readDirectionsAloud(instructions) {
+      if ("speechSynthesis" in window) {
+        var speechSynthesis = window.speechSynthesis;
+        var utterance = new SpeechSynthesisUtterance();
+        utterance.rate = 0.8; // Adjust the rate of speech as needed
+        var currentIndex = 0;
+
+        function readNextInstruction() {
+          if (currentIndex < instructions.length) {
+            utterance.text = instructions[currentIndex].text;
+            speechSynthesis.speak(utterance);
+            currentIndex++;
+            setTimeout(readNextInstruction, 3000); // Adjust the delay (in milliseconds) between instructions here
+          }
+        }
+
+        readNextInstruction();
+      } else {
+        console.log("Speech Synthesis API is not supported");
+      }
+    }
+
+    // Ask for permission to access user's location when the page loads
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        function (position) {
+          var userLat = position.coords.latitude;
+          var userLon = position.coords.longitude;
+
+          // Calculate the distance to each branch and sort branches by distance
+          branches.sort(function (a, b) {
+            var distanceA = calculateDistance(userLat, userLon, a.latitude, a.longitude);
+            var distanceB = calculateDistance(userLat, userLon, b.latitude, b.longitude);
+            return distanceA - distanceB;
+          });
+
+          // Display the sorted list of nearby branches
+          showNearbyBranches(userLat, userLon);
+        },
+        function (error) {
+          console.error("Error retrieving location:", error.message);
+        }
+      );
+    } else {
+      console.log("Geolocation API is not supported");
+    }
+  </script>
+</body>
+</html>
